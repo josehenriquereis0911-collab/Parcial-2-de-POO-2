@@ -1,0 +1,18 @@
+CHANGELOG - LOCADORA DE FILMES
+Entrega parcial 2 - 16/10/2026
+
+IMPLEMENTAÇÃO DA MANIPULAÇÃO DE ARQUIVOS
+- Implementado o armazenamento persistente dos dados em arquivos JSON, sem utilização de banco de dados.
+- Separados os registros em três arquivos: filmes.json, clientes.json e locacoes.json.
+- Criados os métodos salvar_dados() e carregar_dados() para armazenar e recuperar as informações ao fechar e abrir o sistema.
+- Implementado o salvamento automático após cadastros, exclusões, locações e devoluções.
+- Preservados os dados, o estoque e o histórico das locações após reiniciar o sistema.
+
+TRATAMENTO DE ERROS
+- Implementadas validações na leitura dos arquivos e mensagens para falhas de gravação.
+- Utilizados arquivos temporários para maior segurança durante o salvamento.
+- Adicionada a recuperação de dados do antigo dados_locadora.json.
+
+FUNCIONALIDADES PRESERVADAS
+- Mantida a verificação de locações atrasadas utilizando QRunnable, QThreadPool e sinais.
+- Mantido o ranking dos três filmes mais alugados.
