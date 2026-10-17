@@ -1,0 +1,29 @@
+CHANGELOG - LOCADORA DE FILMES
+Entrega parcial 1 - 09/10/2026
+
+IMPLEMENTAÇÃO DE THREADS - VERIFICAÇÃO DE ATRASOS
+- Adicionada a opção "Verificar atrasos" ao menu Cadastros e à barra de ferramentas.
+- Implementado o uso de threads para executar a análise das locações em segundo plano, permitindo que a interface continue respondendo enquanto essa análise é realizada.
+- Criada a classe WorkerAtrasos, que herda de QRunnable e representa a tarefa de verificação. Seu método run() percorre os dados recebidos, identifica locações não devolvidas com data prevista anterior à data da consulta e calcula os dias de atraso.
+- Adicionado QThreadPool à classe JanelaPrincipal para gerenciar as threads que executam as tarefas. No método verificar_atrasos(), a chamada self.threadpool.start(self.worker_atrasos) encaminha a tarefa para execução em uma thread do pool.
+- Preparada, antes de iniciar a tarefa, uma cópia dos dados necessários em tuplas: ID da locação, nome do cliente, título do filme, data prevista e situação da devolução. A análise utiliza os valores do início da consulta, sem acessar diretamente os objetos de locação que podem ser alterados pela interface.
+- Criada a classe SinaisVerificacao, baseada em QObject, com os sinais resultado, erro e finalizado. Esses sinais comunicam à janela o resultado da análise, eventuais falhas e o término da tarefa.
+- Utilizadas conexões Qt.ConnectionType.QueuedConnection para que os métodos da janela recebam os sinais na thread principal. O worker analisa os dados; a criação da janela de resultados e o preenchimento da tabela permanecem na thread da interface.
+- Implementado o método mostrar_atrasos() para exibir ID, cliente, filme, devolução prevista e dias de atraso. Quando não há atrasos, é apresentada uma mensagem informativa.
+- Implementado tratamento de exceções no worker. Em caso de falha, o sinal erro encaminha a mensagem ao método mostrar_erro_verificacao(). O sinal finalizado é emitido no bloco finally, inclusive quando ocorre um erro.
+- Implementado o controle verificacao_em_andamento e desativada temporariamente a ação "Verificar atrasos", impedindo novas verificações enquanto a atual estiver em andamento.
+- Implementado o método finalizar_verificacao() para liberar uma nova consulta, reativar a ação e remover a referência ao worker após o recebimento do sinal de finalização.
+- Ajustado closeEvent() para impedir o fechamento da janela principal enquanto houver uma verificação em andamento ou uma thread ativa no pool, informando que o usuário deve aguardar.
+
+RANKING DOS FILMES MAIS ALUGADOS
+- Implementada a classe DialogoRanking para contar as locações de cada filme, ordenar as quantidades da maior para a menor e selecionar até três filmes.
+- Adicionado o botão "Filmes mais Alugados", conectado ao método ver_ranking_mais_alugados(), para abrir a janela do ranking.
+- Criada uma tabela com posição, título do filme e quantidade de aluguéis. A contagem considera as locações registradas, incluindo as já devolvidas.
+- Adicionado um aviso quando não há locações registradas.
+- Nesta versão, o cálculo do ranking é realizado na thread principal. A tarefa executada em uma thread de trabalho é a verificação de atrasos.
+
+REGISTRO DO INTEGRANTE RESPONSÁVEL PELO RANKING
+Foi feita a funcionalidade de ranking dos três filmes mais alugados, contando as locações de cada filme e agora ele exibe a posição, título e a quantidade de aluguéis em uma tabela.
+
+PRÓXIMA ETAPA
+- Implementar a manipulação e o armazenamento dos dados em arquivos para a segunda entrega parcial.
